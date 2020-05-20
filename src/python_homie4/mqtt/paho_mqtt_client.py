@@ -3,6 +3,8 @@
 import asyncio
 import threading
 import functools
+import random
+import string
 import paho.mqtt.client as mqtt_client
 from .mqtt_base import MQTTBase
 
@@ -30,11 +32,28 @@ class PahoMQTTClient(MQTTBase):
         """
         super().connect()
 
+        mqtt_protocol = mqtt_client.MQTTv311 if self.mqtt_settings.get(
+            "MQTT_PROTOCOL_VERSION") == "v311" else mqtt_client.MQTTv31
+
         self.mqtt_client = mqtt_client.Client(
-            client_id=self.mqtt_settings["MQTT_CLIENT_ID"],
-            protocol=mqtt_client.MQTTv31
-            # clean_session=0
+            client_id=self.mqtt_settings.get(
+                "MQTT_CLIENT_ID") or self.create_client_id(),
+            protocol=mqtt_protocol,
+            clean_session=True if self.mqtt_settings.get(
+                "MQTT_CLEAN_SESSION", "").lower() == 'true' else False,
+            transport='websockets' if self.mqtt_settings.get(
+                "MQTT_TRANSPORT", "").lower() == 'websockets' else 'tcp',
         )
+
+        if self.mqtt_settings.get("MQTT_CAFILE") is not None:
+            self.mqtt_client.tls_set(
+                ca_certs=self.mqtt_settings.get("MQTT_CAFILE"),
+                certfile=self.mqtt_settings.get("MQTT_CERTFILE"),
+                keyfile=self.mqtt_settings.get("MQTT_KEYFILE"),
+                cert_reqs=False if self.mqtt_settings.get(
+                    "MQTT_TLS_UNSAFE") else True
+            )
+
         self.mqtt_client.on_connect = self._on_connect
         self.mqtt_client.on_message = self._on_message
         # self.mqtt_client.on_publish = self._on_publish
@@ -50,9 +69,9 @@ class PahoMQTTClient(MQTTBase):
 
         try:
             self.mqtt_client.connect(
-                self.mqtt_settings["MQTT_BROKER"],
-                port=self.mqtt_settings["MQTT_PORT"],
-                keepalive=self.mqtt_settings["MQTT_KEEPALIVE"],
+                self.mqtt_settings.get("MQTT_BROKER"),
+                port=self.mqtt_settings.get("MQTT_PORT"),
+                keepalive=self.mqtt_settings.get("MQTT_KEEPALIVE"),
             )
 
             self.mqtt_client.loop_start()
@@ -131,3 +150,9 @@ class PahoMQTTClient(MQTTBase):
     def close(self):
         super().close()
         self.event_loop.stop()
+
+    @staticmethod
+    def create_client_id(length=8):
+        """Returns a randomized client id of `length`.
+        """
+        return "".join(random.sample(string.ascii_letters, length))
