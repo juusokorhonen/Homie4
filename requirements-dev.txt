@@ -1,0 +1,5 @@
+flake8
+pycodestyle
+pytest
+pytest-pycodestyle
+pytest-flake8
