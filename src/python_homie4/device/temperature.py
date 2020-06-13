@@ -18,7 +18,8 @@ class TemperatureDevice(StatusDevice):
     ):
         self.temp_units = temp_units
 
-        super().__init__(device_id, name, homie_settings, mqtt_settings)
+        super().__init__(device_id, name, homie_settings=homie_settings,
+                         mqtt_settings=mqtt_settings)
 
     def register_status_properties(self, node):
         self.temperature = TemperatureProperty(node, unit=self.temp_units)

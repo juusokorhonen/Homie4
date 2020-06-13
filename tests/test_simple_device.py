@@ -22,8 +22,6 @@ def test_simple_device():
                                          node="integer", set_value=10,
                                          mqtt_settings=mqtt_settings)
 
-    device_1.get_node.
-
     # for _ in range(10):
     #     time.sleep(0.2)
     #     switch.update_boolean(True)

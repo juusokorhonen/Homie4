@@ -38,7 +38,8 @@ class ThermostatDevice(BaseDevice):
         mqtt_settings=None,
         thermostat_settings=None,
     ):
-        super().__init__(device_id, name, homie_settings, mqtt_settings)
+        super().__init__(device_id, name, homie_settings=homie_settings,
+                         mqtt_settings=mqtt_settings)
 
         node = BaseNode(self, "controls", "Controls", "controls")
         self.add_node(node)

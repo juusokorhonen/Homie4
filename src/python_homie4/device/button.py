@@ -17,7 +17,8 @@ class ButtonDevice(BaseDevice):
         mqtt_settings=None,
     ):
 
-        super().__init__(device_id, name, homie_settings, mqtt_settings)
+        super().__init__(device_id, name, homie_settings=homie_settings,
+                         mqtt_settings=mqtt_settings)
 
         node = BaseNode(self, "button", "Button", "button")
         self.add_node(node)

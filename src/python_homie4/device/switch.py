@@ -11,7 +11,8 @@ class SwitchDevice(BaseDevice):
     def __init__(
         self, device_id=None, name=None, homie_settings=None, mqtt_settings=None
     ):
-        super().__init__(device_id, name, homie_settings, mqtt_settings)
+        super().__init__(device_id, name, homie_settings=homie_settings,
+                         mqtt_settings=mqtt_settings)
 
         self.add_node(SwitchNode(self, id="switch",
                                  set_switch=self.set_switch))

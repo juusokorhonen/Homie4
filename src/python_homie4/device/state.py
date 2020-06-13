@@ -17,7 +17,8 @@ class StateDevice(BaseDevice):
         state_values=None,
     ):
 
-        super().__init__(device_id, name, homie_settings, mqtt_settings)
+        super().__init__(device_id, name, homie_settings=homie_settings,
+                         mqtt_settings=mqtt_settings)
 
         self.add_node(
             StateNode(

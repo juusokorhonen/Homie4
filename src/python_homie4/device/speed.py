@@ -18,7 +18,8 @@ class SpeedDevice(BaseDevice):
         speeds="OFF,LOW,MEDIUM,HIGH",
     ):
 
-        super().__init__(device_id, name, homie_settings, mqtt_settings)
+        super().__init__(device_id, name, homie_settings=homie_settings,
+                         mqtt_settings=mqtt_settings)
 
         node = BaseNode(self, id="speed", name="Speed", type_="speed")
         self.add_node(node)
