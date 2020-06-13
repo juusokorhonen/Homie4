@@ -45,8 +45,9 @@ class BaseDevice(metaclass=ABCMeta):
 
     def __init__(
         self,
-        device_id=None,
-        name=None,
+        device_id,
+        name,
+        *,
         homie_settings={},
         mqtt_settings={},
         extensions=["stats", "firmware", "meta"],
@@ -294,8 +295,8 @@ class BaseDevice(metaclass=ABCMeta):
                 #  check to avoid this problem
                 self.mqtt_subscription_handlers[topic](topic, payload)
             else:
-                logger.warning(f"Device MQTT Message received with RETAIN TRUE: "
-                               + "Topic {topic}, "
+                logger.warning(f"Device MQTT Message received with "
+                               + "RETAIN TRUE: Topic {topic}, "
                                + "Payload {payload} Retain {retain}  QOS {qos}")
 
     @staticmethod

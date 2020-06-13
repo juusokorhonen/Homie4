@@ -7,6 +7,7 @@ from .button import ButtonDevice
 from .contact import ContactDevice
 from .dimmer import DimmerDevice
 from .integer import IntegerDevice
+from .simple import SimpleDevice
 from .speed import SpeedDevice
 from .state import StateDevice
 from .status import StatusDevice

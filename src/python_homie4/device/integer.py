@@ -9,7 +9,8 @@ logger = logging.getLogger(__name__)
 
 class IntegerDevice(BaseDevice):
     def __init__(
-        self, device_id=None, name=None, homie_settings=None, mqtt_settings=None
+        self, device_id=None, name=None,
+        homie_settings=None, mqtt_settings=None
     ):
 
         super().__init__(device_id, name, homie_settings, mqtt_settings)
