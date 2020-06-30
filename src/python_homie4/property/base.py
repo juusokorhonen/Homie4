@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 import re
-from ...helpers import validate_id
+from ..helpers import validate_id
 import logging
 logger = logging.getLogger(__name__)
 

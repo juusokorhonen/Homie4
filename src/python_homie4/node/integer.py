@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .base import BaseNode
-from .property import IntegerProperty
+from ..property import IntegerProperty
 
 
 class IntegerNode(BaseNode):

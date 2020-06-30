@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .base import BaseNode
-from .property import DimmerProperty
+from ..property import DimmerProperty
 
 
 class DimmerNode(BaseNode):

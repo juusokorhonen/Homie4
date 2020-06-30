@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .base import BaseNode
-from .property import BooleanProperty
+from ..property import BooleanProperty
 
 
 class BooleanNode(BaseNode):

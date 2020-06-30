@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .base import BaseNode
-from .property import ContactProperty
+from ..property import ContactProperty
 
 
 class ContactNode(BaseNode):

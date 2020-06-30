@@ -19,5 +19,4 @@ __all__ = (
     IntegerNode,
     StateNode,
     SwitchNode,
-    'property',
 )

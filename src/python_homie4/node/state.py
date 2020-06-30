@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .base import BaseNode
-from .property import EnumProperty
+from ..property import EnumProperty
 
 
 class StateNode(BaseNode):

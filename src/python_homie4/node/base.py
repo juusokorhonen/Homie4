@@ -4,7 +4,7 @@
 from abc import ABCMeta
 import asyncio
 from ..helpers import validate_id
-from .property import BaseProperty
+from ..property import BaseProperty
 
 
 class BaseNode(metaclass=ABCMeta):

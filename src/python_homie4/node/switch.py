@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .base import BaseNode
-from .property import SwitchProperty
+from ..property import SwitchProperty
 
 
 class SwitchNode(BaseNode):
