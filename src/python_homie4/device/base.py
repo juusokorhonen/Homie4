@@ -7,16 +7,33 @@ from datetime import datetime
 
 from .. import __version__ as fw_version
 from .. import __name__ as fw_name
-from ..helpers import validate_id
+from ..helpers import validate_topic
 from ..mqtt.helpers import connect_mqtt_client, close_mqtt_clients
 from ..helpers import RepeatingTimer
-from .helpers import device_states
+from .helpers import device_states, generate_device_id
+from ..node import BaseNode
 
 import logging
 logger = logging.getLogger(__name__)
 
 
 class BaseDevice(metaclass=ABCMeta):
+    """A base class for all devices.
+
+    Notes
+    -----
+    A 'device' comprises one ore more 'nodes'. Each 'node' contains one or more
+    'properties'. For example, a sensor device could be made from a thermometer
+    node and an anemometer node. The thermometer node would add a property
+    called temperature. The anemometer node could house a wind speed property
+    and a wind direction property.
+
+    Nodes are registered to the devie using `add_node` method, which binds
+    `update_` and `get_` methods. For example, adding a node called
+    "thermometer" will create two methods called `update_thermometer` and
+    `get_thermometer`.
+
+    """
     DEVICE_STATES = [
         "init",
         "ready",
@@ -58,9 +75,10 @@ class BaseDevice(metaclass=ABCMeta):
         self._mqtt_connected = False
 
         if device_id is None:
-            device_id = self.generate_device_id()
+            device_id = generate_device_id(self.instance_number)
 
-        assert validate_id(device_id), "Invalid device id {}".format(device_id)
+        assert validate_topic(
+            device_id), "Invalid device id {}".format(device_id)
         self.device_id = device_id
 
         assert name
@@ -91,17 +109,6 @@ class BaseDevice(metaclass=ABCMeta):
     def close(self, *args):
         logger.info("Device Close {}".format(self.name))
         self.state = "disconnected"
-
-    def generate_device_id(self):
-        """Generates a device id from instance number.
-
-        Returns
-        -------
-        device_id : str
-            Example, 'device0001' for instance 1.
-
-        """
-        return "device{:04d}".format(self.instance_number)
 
     def start(self):
         """Starts the device.
@@ -225,8 +232,27 @@ class BaseDevice(metaclass=ABCMeta):
             for topic, handler in node.get_subscriptions().items():
                 self.add_subscription(topic, handler)
 
-    def add_node(self, node):
+    def add_node(self, node: BaseNode):
+        """Registers a `node` to this device.
+
+        Parameters
+        ----------
+        node : BaseNode
+            An instance of BaseNode to register to this device.
+
+        """
+        assert isinstance(node, BaseNode)
+        assert node.id not in self.nodes, f"{node.id} already registered."
+
         self.nodes[node.id] = node
+
+        # Add a update_'node' method to object
+        setattr(self, "update_" + node.id,
+                lambda value: self.update_node(node.id, value))
+
+        # Add get_`node` method to object
+        setattr(self, "get_" + node.id,
+                lambda: self.get_node(node.id)).get_property()
 
         if self.nodes_published:  # update, publish property changes
             self.publish_nodes(self.retained, self.qos)

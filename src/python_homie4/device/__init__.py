@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from .helpers import DeviceState, device_states
+from .helpers import DeviceState, device_states, generate_device_id
 from .base import BaseDevice
 from .boolean import BooleanDevice
 from .button import ButtonDevice
@@ -20,12 +20,14 @@ from .thermostat import ThermostatDevice
 __all__ = (
     DeviceState,
     device_states,
+    generate_device_id,
     BaseDevice,
     BooleanDevice,
     ButtonDevice,
     ContactDevice,
     DimmerDevice,
     IntegerDevice,
+    SimpleDevice,
     SpeedDevice,
     StateDevice,
     StatusDevice,

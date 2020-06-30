@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 import re
+from ...helpers import validate_id
 import logging
 logger = logging.getLogger(__name__)
 
@@ -32,10 +33,7 @@ class BaseProperty(metaclass=ABCMeta):
         tags=[],
         meta={},
     ):
-        if self.validate_id(id) is False:
-            logger.error("Property ID not valid {}".format(id))
-            assert self.validate_id(id), "Property ID is not valid {}"\
-                .format(id)
+        assert validate_id(id), f"Property ID `{id}` is not valid"
 
         self.id = id
         self.name = name
@@ -76,6 +74,7 @@ class BaseProperty(metaclass=ABCMeta):
                 )
             )
 
+    @abstractmethod
     def validate_value(self, value):
         return True  # override as needed
 
@@ -222,9 +221,3 @@ class BaseProperty(metaclass=ABCMeta):
                     topic, payload
                 )
             )
-
-    @staticmethod
-    def validate_id(_id):
-        assert isinstance(_id, str)
-        r = re.compile("(^(?!\\-)[a-z0-9\\-]+(?<!\\-)$)")
-        return _id if r.match(_id) else False

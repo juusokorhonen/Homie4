@@ -3,7 +3,7 @@
 import re
 
 
-def validate_id(id):
+def validate_topic(id):
     """Validate a topic ID according to the homie defintion
     https://homieiot.github.io/specification/#topic-ids
 

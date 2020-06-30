@@ -15,12 +15,19 @@ def test_simple_device():
     with pytest.raises(AssertionError):
         homie.device.SimpleDevice("simple-device-1",
                                   "Simple Integer Device",
-                                  node="integer", mqtt_settings=mqtt_settings)  # set_values is missing
+                                  node="integer",
+                                  mqtt_settings=mqtt_settings)  # set_value is missing
 
+    initial_value = 10
     device_1 = homie.device.SimpleDevice("simple-device-1",
                                          "Simple Integer Device",
-                                         node="integer", set_value=10,
+                                         node="integer",
+                                         node_init=dict(
+                                             set_value=initial_value
+                                         ),
                                          mqtt_settings=mqtt_settings)
+
+    assert device_1.get_integer() == initial_value
 
     # for _ in range(10):
     #     time.sleep(0.2)
